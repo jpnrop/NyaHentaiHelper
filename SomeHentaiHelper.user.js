@@ -29,8 +29,8 @@
 // @require      https://cdn.jsdelivr.net/npm/comlink@4.3.0/dist/umd/comlink.min.js
 // @run-at       document-end
 // @noframes
-// @homepageURL  https://github.com/Tsuk1ko/nhentai-helper
-// @supportURL   https://github.com/Tsuk1ko/nhentai-helper/issues
+// @homepageURL  https://github.com/jpnrop/SomeHentaiHelper
+// @supportURL   https://github.com/jpnrop/SomeHentaiHelper/issues
 // ==/UserScript==
 
 (() => {
