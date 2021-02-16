@@ -26,7 +26,7 @@
 // @require      https://cdn.jsdelivr.net/npm/vue@2.6.11/dist/vue.min.js
 // @require      https://cdn.jsdelivr.net/npm/noty@3.1.4/lib/noty.min.js
 // @require      https://cdn.jsdelivr.net/npm/md5@2.3.0/dist/md5.min.js
-// @require      https://cdn.jsdelivr.net/npm/comlink@4.3.0/dist/umd/comlink.min.js
+// @require      https://unpkg.com/comlink/dist/umd/comlink.js
 // @run-at       document-end
 // @noframes
 // @homepageURL  https://github.com/jpnrop/SomeHentaiHelper
@@ -36,7 +36,7 @@
 (() => {
     'use strict';
 
-    // 防 nhentai console 屏蔽
+    // Anti nhentai console blocking
     if (localStorage.getItem('NHENTAI_HELPER_DEBUG') && typeof unsafeWindow.N !== 'undefined') {
         const isNodeOrElement = typeof Node === 'object' && typeof HTMLElement === 'object' ? o => o instanceof Node || o instanceof HTMLElement : o => o && typeof o === 'object' && typeof o.nodeType === 'number' && typeof o.nodeName === 'string';
         const c = unsafeWindow.console;
@@ -63,7 +63,7 @@
     class JSZipWorkerPool {
         constructor() {
             this.pool = [];
-            this.WORKER_URL = URL.createObjectURL(new Blob(['importScripts("https://cdn.jsdelivr.net/npm/comlink@4.3.0/dist/umd/comlink.min.js","https://cdn.jsdelivr.net/npm/jszip@3.5.0/dist/jszip.min.js");class JSZipWorker{constructor(){this.zip=new JSZip}file(name,{data:data}){this.zip.file(name,data)}generateAsync(options,onUpdate){return this.zip.generateAsync(options,onUpdate).then(data=>Comlink.transfer({data:data},[data]))}}Comlink.expose(JSZipWorker);'], { type: 'text/javascript' }));
+            this.WORKER_URL = URL.createObjectURL(new Blob(['importScripts("https://unpkg.com/comlink/dist/umd/comlink.js","https://cdn.jsdelivr.net/npm/jszip@3.5.0/dist/jszip.min.js");class JSZipWorker{constructor(){this.zip=new JSZip}file(name,{data:data}){this.zip.file(name,data)}generateAsync(options,onUpdate){return this.zip.generateAsync(options,onUpdate).then(data=>Comlink.transfer({data:data},[data]))}}Comlink.expose(JSZipWorker);'], { type: 'text/javascript' }));
             for (let id = 0; id < WORKER_THREAD_NUM; id++) {
                 this.pool.push({
                     id,
@@ -107,10 +107,10 @@
         }
     }
 
-    // 历史记录上限
+    // History limit
     const HISTORY_MAX = 1000;
 
-    // 下载线程数
+    // Download threads
     let THREAD = GM_getValue('thread_num', 8);
     GM_registerMenuCommand('Download Thread', () => {
         let num;
@@ -123,7 +123,7 @@
         GM_setValue('thread_num', num);
     });
 
-    // 在新窗口打开本子
+    // Open book in new window
     let OPEN_ON_NEW_TAB = GM_getValue('open_on_new_tab', true);
     GM_registerMenuCommand('Open On New Tab', () => {
         OPEN_ON_NEW_TAB = confirm(`Do you want to open gallery page on a new tab?
@@ -133,7 +133,7 @@ Please refresh to take effect after modification.`);
         GM_setValue('open_on_new_tab', OPEN_ON_NEW_TAB);
     });
 
-    // 自定义下载地址
+    // Custom Downloads
     let CUSTOM_DOWNLOAD_URL = GM_getValue('custom_download_url', '');
     GM_registerMenuCommand('Custom Download URL', () => {
         const input = prompt(
@@ -151,7 +151,7 @@ Available placeholders:
         GM_setValue('custom_download_url', CUSTOM_DOWNLOAD_URL);
     });
 
-    // 自定义压缩文件名
+    // Custom compressed file name
     const CF_EXT_OLD = GM_getValue('cf_ext');
     if (CF_EXT_OLD) {
         GM_setValue('cf_name', `{{japanese}}.${CF_EXT_OLD}`);
@@ -176,7 +176,7 @@ Available placeholders:
         GM_setValue('cf_name', CF_NAME);
     });
 
-    // 自定义压缩级别
+    // Custom compression levels
     let C_LEVEL = parseInt(GM_getValue('c_lv', '0')) || 0;
     GM_registerMenuCommand('Compression Level', () => {
         let num;
@@ -203,7 +203,7 @@ Available placeholders:
         };
     };
 
-    // 文件名补零
+    // Filenames to fill in the zeros
     let FILENAME_LENGTH = parseInt(GM_getValue('filename_length', '0')) || 0;
     GM_registerMenuCommand('Filename Length', () => {
         let num;
@@ -246,7 +246,7 @@ Available placeholders:
 
     const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
 
-    // 页面类型
+    // Page Type
     const pageType = {
         gallery: /^\/g\/[0-9]+\/(\?.*)?$/.test(window.location.pathname),
         galleryPage: /^\/g\/[0-9]+(\/list)?\/[0-9]+\/(\?.*)?$/.test(window.location.pathname),
@@ -254,7 +254,7 @@ Available placeholders:
     };
     const isNyahentai = window.location.host !== 'nhentai.net';
 
-    // 队列
+    // Queue
     class AsyncQueue {
         constructor(thread = 1) {
             this.queue = [];
@@ -305,19 +305,19 @@ Available placeholders:
         }
     }
 
-    // 下载队列
+    // Download Queue
     const dlQueue = new AsyncQueue();
     dlQueue.skip = false;
 
-    // 压缩队列
+    // Compression Queue
     const zipQueue = new AsyncQueue(WORKER_THREAD_NUM);
 
-    // 下载历史
+    // Download History
     const downloadHistory = JSON.parse(localStorage.getItem('downloadHistory')) || [];
     const downloadHistorySet = new Set(downloadHistory);
     const isDownloaded = title => downloadHistorySet.has(MD5(title)) || downloadHistorySet.has(title);
 
-    // 下载面板
+    // Download Panel
     Vue.component('download-item', {
         props: ['item', 'index'],
         computed: {
@@ -369,7 +369,7 @@ Available placeholders:
     });
     new Vue({
         el: '#download-panel',
-        // TODO: 两个都改造
+        // TODO: Both remodeling
         data: {
             dlQueue: dlQueue.queue,
             zipQueue: zipQueue.queue,
@@ -392,7 +392,7 @@ Available placeholders:
         template: '<download-list :list="infoList" />',
     });
 
-    // 网络请求
+    // Network Request
     const get = (url, responseType = 'json', retry = 3) =>
         new Promise((resolve, reject) => {
             try {
@@ -431,7 +431,7 @@ Available placeholders:
     };
     const getDownloadURL = (mid, filename) => `https://${isNyahentai ? 'i0.mspcdn0.xyz' : 'i.nhentai.net'}/galleries/${mid}/${filename}`;
 
-    // 伪多线程
+    // Pseudo-multithreading
     const multiThread = async (tasks, promiseFunc) => {
         const threads = [];
         let taskIndex = 0;
@@ -446,7 +446,7 @@ Available placeholders:
                 resolve();
             });
 
-        // 创建线程
+        // Creating threads
         for (let threadID = 0; threadID < THREAD; threadID++) {
             await sleep(Math.min(2000 / THREAD, 300));
             threads.push(run(threadID));
@@ -454,7 +454,7 @@ Available placeholders:
         return Promise.all(threads);
     };
 
-    // 获取本子信息
+    // Get information about this book
     const getGallery = async gid => {
         const gallery = unsafeWindow.gallery;
         const {
@@ -490,7 +490,7 @@ Available placeholders:
         return info;
     };
 
-    // 下载本子
+    // Download this book
     const downloadGallery = async ({ mid, pages, cfName }, $btn = null, $btnTxt = null, headTxt = false) => {
         const info = (dlQueue.queue[0] && dlQueue.queue[0].info) || {};
         info.done = 0;
@@ -565,7 +565,7 @@ Available placeholders:
     };
     const downloadG = async (gid, $btn = null, $btnTxt = null, headTxt = '') => downloadGallery(await getGallery(gid), $btn, $btnTxt, headTxt);
 
-    // 语言过滤
+    // Language Filter
     const langFilter = lang => {
         if (lang == 'none') $('.gallery').removeClass('hidden');
         else {
@@ -574,20 +574,20 @@ Available placeholders:
         }
     };
 
-    // 本子浏览模式
+    // Book browsing mode
     const applyGPViewStyle = gpViewMode => {
         if (gpViewMode) $('body').append(`<style id="gp-view-mode-style">#image-container img{width:auto;max-width:calc(100vw - 20px);max-height:${isNyahentai ? 'calc(100vh - 65px)' : '100vh'}}</style>`);
         else $('#gp-view-mode-style').remove();
     };
 
-    // 功能初始化
+    // Function initialization
     const init = (first = false) => {
         if (!first) {
             $('.pagination a').each(function () {
                 const $this = $(this);
                 $this.attr('href', $this.attr('href').replace(/(&?)_pjax=[^&]*(&?)/, ''));
             });
-            // pjax 后需要初始化页面以加载 lazyload 图片
+            // The page needs to be initialized after pjax to load lazyload images
             const n = unsafeWindow.n;
             if (typeof n !== 'undefined') {
                 n.install_lazy_loader();
@@ -595,7 +595,7 @@ Available placeholders:
         }
 
         if (pageType.gallery) {
-            // 本子详情页
+            // Book Details Page
             $('#info > .buttons').append(`<button class="btn btn-secondary download-zip"><i class="fa fa-download"></i> <span class="download-zip-txt">Download ${getDpDlExt()}</span></button>`);
 
             const $btn = $('.download-zip');
@@ -649,7 +649,7 @@ Available placeholders:
                 }
             });
         } else if (pageType.list) {
-            // 本子列表页
+            // Book List Page
             $('.gallery').each(function () {
                 const $this = $(this);
                 $this.prepend('<button class="btn btn-secondary download-zip"><i class="fa fa-download"></i> <span class="download-zip-txt"></span></button>');
@@ -658,7 +658,7 @@ Available placeholders:
                 if (OPEN_ON_NEW_TAB) $a.attr('target', '_blank');
                 const gid = /[0-9]+/.exec($a.attr('href'))[0];
 
-                // 用于语言过滤
+                // For language filtering
                 let language = '';
                 const dataTags = $this.attr('data-tags').split(' ');
                 if (dataTags.includes('6346')) language = 'jp';
@@ -736,13 +736,13 @@ Available placeholders:
             });
 
             if (first) {
-                // 语言过滤
+                // Language Filter
                 $('ul.menu.left').append('<li style="padding:0 10px">Filter: <select id="lang-filter"><option value="none">None</option><option value="zh">Chinese</option><option value="jp">Japanese</option><option value="en">English</option></select></li>');
                 $('#lang-filter').change(function () {
                     langFilter(this.value);
                     sessionStorage.setItem('lang-filter', this.value);
                 });
-                // 左右键翻页
+                // Left and right keys to turn pages
                 $(document).keydown(event => {
                     switch (event.keyCode) {
                         case 37: // left
@@ -755,14 +755,14 @@ Available placeholders:
                 });
             }
 
-            // 还原记住的语言过滤
+            // Restore the remembered language filter
             const rememberedLANG = sessionStorage.getItem('lang-filter');
             if (rememberedLANG) {
                 $('#lang-filter')[0].value = rememberedLANG;
                 langFilter(rememberedLANG);
             }
 
-            // 还原下载队列
+            // Restore download queues
             const dlQueueInfos = JSON.parse(sessionStorage.getItem('queueInfos'));
             if (first && dlQueueInfos) {
                 for (const info of dlQueueInfos) {
@@ -787,7 +787,7 @@ Available placeholders:
             }
             dlQueue.start();
         } else if (pageType.galleryPage && isNyahentai) {
-            // 本子在线阅读
+            // Book read online
             const gpViewModeText = ['[off]', '[on]'];
             let gpViewMode = GM_getValue('gp_view_mode', 0);
             applyGPViewStyle(gpViewMode);
