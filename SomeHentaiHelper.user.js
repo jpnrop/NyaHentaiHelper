@@ -1,20 +1,16 @@
 // ==UserScript==
-// @name         nHentai Helper
-// @name:zh-CN   nHentai 助手
-// @name:zh-TW   nHentai 助手
-// @namespace    https://github.com/Tsuk1ko
-// @version      2.9.1
+// @name         SomeHentai Helper
+// @namespace    https://github.com/jpnrop
+// @version      1.0.1
 // @icon         https://nhentai.net/favicon.ico
 // @description        Download nHentai doujin as compression file easily, and add some useful features. Also support NyaHentai.
-// @description:zh-CN  为 nHentai 增加压缩打包下载方式以及一些辅助功能，同时支持 NyaHentai
-// @description:zh-TW  爲 nHentai 增加壓縮打包下載方式以及一些輔助功能，同時支持 NyaHentai
-// @author       Jindai Kirin
+// @author       jpnrop
 // @match        https://nhentai.net/*
 // @include      /^https:\/\/([^\/]*\.)?(nya|dog|cat|bug|qq|fox)hentai[0-9]*\./
 // @connect      nhentai.net
 // @connect      i.nhentai.net
 // @connect      json2jsonp.com
-// @connect      i0.nyacdn.com
+// @connect      i0.mspcdn0.xyz
 // @license      GPL-3.0
 // @grant        GM_addStyle
 // @grant        GM_getValue
@@ -433,7 +429,7 @@ Available placeholders:
         const url = `https://nhentai.net/api/gallery/${gid}`;
         return isNyahentai ? proxyGetJSON(url) : get(url);
     };
-    const getDownloadURL = (mid, filename) => `https://${isNyahentai ? 'i0.nyacdn.com' : 'i.nhentai.net'}/galleries/${mid}/${filename}`;
+    const getDownloadURL = (mid, filename) => `https://${isNyahentai ? 'i0.mspcdn0.xyz' : 'i.nhentai.net'}/galleries/${mid}/${filename}`;
 
     // 伪多线程
     const multiThread = async (tasks, promiseFunc) => {
