@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         SomeHentai Helper
 // @namespace    https://github.com/jpnrop
-// @version      1.0.1
+// @version      1.0.2
 // @icon         https://nhentai.net/favicon.ico
 // @description        Download nHentai doujin as compression file easily, and add some useful features. Also support NyaHentai.
 // @author       jpnrop
@@ -26,7 +26,7 @@
 // @require      https://cdn.jsdelivr.net/npm/vue@2.6.11/dist/vue.min.js
 // @require      https://cdn.jsdelivr.net/npm/noty@3.1.4/lib/noty.min.js
 // @require      https://cdn.jsdelivr.net/npm/md5@2.3.0/dist/md5.min.js
-// @require      https://unpkg.com/comlink/dist/umd/comlink.js
+// @require      https://cdn.jsdelivr.net/npm/comlink@4.3.0/dist/umd/comlink.min.js
 // @run-at       document-end
 // @noframes
 // @homepageURL  https://github.com/jpnrop/SomeHentaiHelper
@@ -63,7 +63,7 @@
     class JSZipWorkerPool {
         constructor() {
             this.pool = [];
-            this.WORKER_URL = URL.createObjectURL(new Blob(['importScripts("https://unpkg.com/comlink/dist/umd/comlink.js","https://cdn.jsdelivr.net/npm/jszip@3.5.0/dist/jszip.min.js");class JSZipWorker{constructor(){this.zip=new JSZip}file(name,{data:data}){this.zip.file(name,data)}generateAsync(options,onUpdate){return this.zip.generateAsync(options,onUpdate).then(data=>Comlink.transfer({data:data},[data]))}}Comlink.expose(JSZipWorker);'], { type: 'text/javascript' }));
+            this.WORKER_URL = URL.createObjectURL(new Blob(['importScripts("https://cdn.jsdelivr.net/npm/comlink@4.3.0/dist/umd/comlink.min.js","https://cdn.jsdelivr.net/npm/jszip@3.5.0/dist/jszip.min.js");class JSZipWorker{constructor(){this.zip=new JSZip}file(name,{data:data}){this.zip.file(name,data)}generateAsync(options,onUpdate){return this.zip.generateAsync(options,onUpdate).then(data=>Comlink.transfer({data:data},[data]))}}Comlink.expose(JSZipWorker);'], { type: 'text/javascript' }));
             for (let id = 0; id < WORKER_THREAD_NUM; id++) {
                 this.pool.push({
                     id,
