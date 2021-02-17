@@ -10,7 +10,7 @@
 // @connect      nhentai.net
 // @connect      i.nhentai.net
 // @connect      json2jsonp.com
-// @connect      i0.mspcdn0.xyz
+// @connect      i0.mspcdn3.xyz
 // @license      GPL-3.0
 // @grant        GM_addStyle
 // @grant        GM_getValue
@@ -429,7 +429,7 @@ Available placeholders:
         const url = `https://nhentai.net/api/gallery/${gid}`;
         return isNyahentai ? proxyGetJSON(url) : get(url);
     };
-    const getDownloadURL = (mid, filename) => `https://${isNyahentai ? 'i0.mspcdn0.xyz' : 'i.nhentai.net'}/galleries/${mid}/${filename}`;
+    const getDownloadURL = (mid, filename) => `https://${isNyahentai ? 'i0.mspcdn3.xyz' : 'i.nhentai.net'}/galleries/${mid}/${filename}`;
 
     // Pseudo-multithreading
     const multiThread = async (tasks, promiseFunc) => {
