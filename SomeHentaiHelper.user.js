@@ -1,16 +1,14 @@
 // ==UserScript==
-// @name         SomeHentai Helper
+// @name         nyaHentai Helper
 // @namespace    https://github.com/jpnrop
-// @version      1.0.2
-// @icon         https://nhentai.net/favicon.ico
-// @description        Download nHentai doujin as compression file easily, and add some useful features. Also support NyaHentai.
+// @version      1.0.3
+// @icon         https://static.nyahentai.pw/img/favicon.ico
+// @description        Download nyaHentai doujin as compression file easily, and add some useful features.
 // @author       jpnrop
-// @match        https://nhentai.net/*
+// @match        https://ja.nyahentai.*/*
 // @include      /^https:\/\/([^\/]*\.)?(nya|dog|cat|bug|qq|fox)hentai[0-9]*\./
-// @connect      nhentai.net
-// @connect      i.nhentai.net
 // @connect      json2jsonp.com
-// @connect      i0.mspcdn3.xyz
+// @connect      t1.mspcdn.xyz
 // @license      GPL-3.0
 // @grant        GM_addStyle
 // @grant        GM_getValue
@@ -429,7 +427,7 @@ Available placeholders:
         const url = `https://nhentai.net/api/gallery/${gid}`;
         return isNyahentai ? proxyGetJSON(url) : get(url);
     };
-    const getDownloadURL = (mid, filename) => `https://${isNyahentai ? 'i0.mspcdn3.xyz' : 'i.nhentai.net'}/galleries/${mid}/${filename}`;
+    const getDownloadURL = (mid, filename) => `https://${isNyahentai ? 't1.mspcdn.xyz' : 'i.nhentai.net'}/galleries/${mid}/${filename}`;
 
     // Pseudo-multithreading
     const multiThread = async (tasks, promiseFunc) => {
