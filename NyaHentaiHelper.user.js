@@ -1,5 +1,5 @@
 // ==UserScript==
-// @name         nyaHentai Helper
+// @name         NyaHentai Helper
 // @namespace    https://github.com/jpnrop
 // @version      1.0.3
 // @icon         https://static.nyahentai.pw/img/favicon.ico
