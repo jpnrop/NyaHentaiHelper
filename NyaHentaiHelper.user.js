@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         NyaHentai Helper Alpha
 // @namespace    https://github.com/jpnrop
-// @version      1.0.1a
+// @version      1.0.2
 // @icon         https://static.nyahentai.pw/img/favicon.ico
 // @description        Add tag filter.
 // @author       jpnrop
