@@ -76,8 +76,8 @@ function findCommonElements (inArrays) {
       // Tag Filter Selecting
       $('ul.menu.left').append('<li style="padding:0 10px">Lang: <select id="tag-Filter"><option value="none">None</option><option value="filtered">Filter</option></select></li>');
       $('#tag-Filter').change(function () {
-        // tagFilter(this.value);
-        // sessionStorage.setItem('tag-Filter', this.value);
+        tagFilter(this.value);
+        sessionStorage.setItem('tag-Filter', this.value);
         const tagArray = [];
         $('#tag-Filter option:selected').each(function () {
           tagArray.push($(this).val());
@@ -92,7 +92,7 @@ function findCommonElements (inArrays) {
         tagFilter(rememberedTAG);
       }
       // Dubug for tag filtering
-      console.log(findCommonElements(tagCloud));
+      // console.log(findCommonElements(tagCloud));
     }
   };
   init();
