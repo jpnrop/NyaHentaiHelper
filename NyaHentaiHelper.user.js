@@ -1,16 +1,14 @@
 // ==UserScript==
-// @name         NyaHentai Helper Alpha
+// @name         NyaHentai Filter
 // @namespace    https://github.com/jpnrop
 // @version      1.0.2
 // @icon         https://static.nyahentai.pw/img/favicon.ico
-// @description        Add tag filter.
+// @description        Add lang/tag/author/group filter.
 // @author       jpnrop
 // @match        https://ja.nyahentai.com/*
 // @license      GPL-3.0
-// @resource     select2 https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css
-// @require      https://cdn.jsdelivr.net/npm/jquery@v3.4.1/dist/jquery.min.js
-// @require      https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js
-// @require      http://underscorejs.org/underscore-min.js
+// @require      https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js
+// @require      https://cdn.jsdelivr.net/npm/underscore@latest/underscore-umd-min.js
 // @run-at       document-end
 // @noframes
 // @homepageURL  https://github.com/jpnrop/SomeHentaiHelper
