@@ -37,7 +37,8 @@ function getTags () {
   
   const init = () => {
     $('.gallery').each(getTags);
-    console.log(findCommonElements(tagCloud));
+    let tagname = $("h1")[0].childNodes[3].innerText;
+    console.log(findCommonElements(tagCloud) + ' : ' + tagname);
   };
   init();
 })();
